@@ -1,5 +1,4 @@
 import sys
-import time
 from copy import copy
 from math import acos, sqrt
 from random import randint
@@ -145,7 +144,6 @@ class main_gui(Ui_ConvexHullGui, QWidget):
             point_cur = button
 
             while point_cur is not button or not flag:
-                time.sleep(1)
                 flag = True
                 max_radians = 0
                 target = None

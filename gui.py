@@ -42,7 +42,7 @@ class Ui_ConvexHullGui(object):
         self.inputbox.setGeometry(QtCore.QRect(10, 20, 101, 31))
         self.inputbox.setAlignment(QtCore.Qt.AlignCenter)
         self.inputbox.setMinimum(3)
-        self.inputbox.setMaximum(100)
+        self.inputbox.setMaximum(500)
         self.inputbox.setSingleStep(5)
         self.inputbox.setProperty("value", 10)
         self.inputbox.setObjectName("inputbox")
