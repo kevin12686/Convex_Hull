@@ -1,5 +1,7 @@
 import sys
-from math import acos, sqrt, pow, fabs
+import time
+from copy import copy
+from math import acos, sqrt
 from random import randint
 from PyQt5.QtWidgets import QApplication, QWidget, QGraphicsScene, QGraphicsLineItem, QGraphicsEllipseItem
 from PyQt5.QtGui import QPen, QColor
@@ -18,27 +20,36 @@ class Point:
     def __repr__(self):
         return '<Point x:{} y:{}>'.format(self.x, self.y)
 
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
     @staticmethod
     def random_generate():
         return Point(randint(0, Point.MAX_X), randint(0, Point.MAX_Y))
 
     @staticmethod
-    def get_x_distance(Point1, Point2):
-        assert isinstance(Point1, Point)
-        assert isinstance(Point2, Point)
-        return fabs(Point1.x - Point1.x)
+    def get_length(Vector):
+        assert isinstance(Vector, Point)
+        return sqrt(Vector.x ** 2 + Vector.y ** 2)
 
     @staticmethod
-    def get_y_distance(Point1, Point2):
-        assert isinstance(Point1, Point)
-        assert isinstance(Point2, Point)
-        return fabs(Point1.y - Point1.y)
+    def get_product(Vector1, Vector2):
+        assert isinstance(Vector1, Point)
+        assert isinstance(Vector2, Point)
+        return Vector1.x * Vector2.x + Vector1.y * Vector2.y
 
     @staticmethod
-    def get_hyp(Point1, Point2):
-        assert isinstance(Point1, Point)
-        assert isinstance(Point2, Point)
-        return sqrt(pow(Point1.x - Point2.x, 2) + pow(Point1.y - Point2.y, 2))
+    def get_radians(Point_pre, Point_cur, Point_nex):
+        assert isinstance(Point_pre, Point)
+        assert isinstance(Point_cur, Point)
+        assert isinstance(Point_nex, Point)
+        U = copy(Point_pre)
+        V = copy(Point_nex)
+        U.x -= Point_cur.x
+        U.y -= Point_cur.y
+        V.x -= Point_cur.x
+        V.y -= Point_cur.y
+        return acos(Point.get_product(U, V) / (Point.get_length(U) * Point.get_length(V)))
 
 
 class Line:
@@ -72,7 +83,7 @@ class main_gui(Ui_ConvexHullGui, QWidget):
 
     def set_Pen(self):
         self.POINT_PEN_Width = 4
-        self.LINE_PEN_Width = 2
+        self.LINE_PEN_Width = 1
         self.POINT_PEN_Color = QColor(0, 0, 255)
         self.LINE_PEN_Color = QColor(0, 0, 255)
         self.pointPen = QPen()
@@ -126,10 +137,30 @@ class main_gui(Ui_ConvexHullGui, QWidget):
         self.all_input_disable()
 
         if len(self.Point_list) > 0:
-            sort_x = self.Point_list
-            sort_y = self.Point_list.copy()
-            sort_x.sort(key=lambda k: k.x)
-            sort_y.sort(key=lambda k: k.y)
+            self.Point_list.sort(key=lambda k: k.y)
+            button = self.Point_list[-1]
+
+            flag = False
+            point_pre = Point(button.x - 1, button.y)
+            point_cur = button
+
+            while point_cur is not button or not flag:
+                time.sleep(1)
+                flag = True
+                max_radians = 0
+                target = None
+
+                for point_nex in self.Point_list:
+                    if point_nex != point_cur and point_nex != point_pre:
+                        rad = Point.get_radians(point_pre, point_cur, point_nex)
+                        if rad > max_radians:
+                            max_radians = rad
+                            target = point_nex
+
+                point_pre = point_cur
+                point_cur = target
+                self.Point_list.remove(target)
+                self.add_Line(Line(point_pre, point_cur))
 
         self.all_input_enable()
 
