@@ -39,6 +39,7 @@ class Ui_ConvexHullGui(object):
         self.inputbox.setGeometry(QtCore.QRect(10, 20, 101, 31))
         self.inputbox.setAlignment(QtCore.Qt.AlignCenter)
         self.inputbox.setMinimum(3)
+        self.inputbox.setMaximum(100)
         self.inputbox.setProperty("value", 8)
         self.inputbox.setObjectName("inputbox")
         self.vertexconfirm = QtWidgets.QPushButton(self.groupBox)
