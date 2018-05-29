@@ -69,6 +69,7 @@ class main_gui(Ui_ConvexHullGui, QWidget):
         self.set_Pen()
         self.Point_list = list()
         self.Line_list = list()
+        self.run = False
 
         self.vertexconfirm.clicked.connect(self.generate_p)
         self.runbutton.clicked.connect(self.find_convex_hull)
@@ -81,10 +82,10 @@ class main_gui(Ui_ConvexHullGui, QWidget):
         self.graphicsView.setScene(self.gscene)
 
     def set_Pen(self):
-        self.POINT_PEN_Width = 4
+        self.POINT_PEN_Width = 2
         self.LINE_PEN_Width = 1
         self.POINT_PEN_Color = QColor(0, 0, 255)
-        self.LINE_PEN_Color = QColor(0, 0, 255)
+        self.LINE_PEN_Color = QColor(0, 255, 0)
         self.pointPen = QPen()
         self.pointPen.setWidth(self.POINT_PEN_Width)
         self.pointPen.setColor(self.POINT_PEN_Color)
@@ -126,6 +127,7 @@ class main_gui(Ui_ConvexHullGui, QWidget):
     def generate_p(self):
         self.all_input_disable()
         self.clear()
+        self.run = False
         for i in range(self.inputbox.value()):
             p = Point.random_generate()
             self.Point_list.append(p)
@@ -135,7 +137,8 @@ class main_gui(Ui_ConvexHullGui, QWidget):
     def find_convex_hull(self):
         self.all_input_disable()
 
-        if len(self.Point_list) > 0:
+        if len(self.Point_list) > 3 and not self.run:
+            self.run = True
             self.Point_list.sort(key=lambda k: k.y)
             button = self.Point_list[-1]
 
