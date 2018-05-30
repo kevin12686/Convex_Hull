@@ -85,7 +85,7 @@ class main_gui(Ui_ConvexHullGui, QWidget):
         self.POINT_PEN_Width = 2
         self.LINE_PEN_Width = 1
         self.POINT_PEN_Color = QColor(0, 0, 255)
-        self.LINE_PEN_Color = QColor(0, 255, 0)
+        self.LINE_PEN_Color = QColor(0, 0, 0)
         self.pointPen = QPen()
         self.pointPen.setWidth(self.POINT_PEN_Width)
         self.pointPen.setColor(self.POINT_PEN_Color)
